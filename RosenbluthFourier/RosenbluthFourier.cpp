@@ -12,7 +12,7 @@ int main() {
 
 	std::cout << "enter N of points "; std::cin >> size;
 	std::cout << "enter sup "; std::cin >> sup;
-	std::cout << "Interval runs from 0 to " << sup << " and will be divided in " << size
+	std::cout << "Interval runs from 0 to " << sup << " and will be divided into " << size
 		<< " intervals " << endl << "whose abscissas are:" << endl << endl;
 
 	double delta;
