@@ -24,7 +24,7 @@ int main() {
 
 	for (int i = 0; i <= size; i++) {
 		X[i] = delta*i;
-		Y[i] = X[i] * exp(X[i]);
+		Y[i] = X[i] * exp(-pow(X[i],2));
 		cout << "X[" << i << "] = " << X[i] << "  Y[" << i << "] = " << Y[i] << endl << endl;
 	}
 
