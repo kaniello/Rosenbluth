@@ -12,7 +12,7 @@ int main() {
 
 	std::cout << "enter N of points "; std::cin >> size;
 	std::cout << "enter sup "; std::cin >> sup;
-	std::cout << "Interval runs from 0 to " << sup << " and will be divided into " << size
+	std::cout << "Interval runs from 0 to " << sup << " and will be divided in " << size
 		<< " intervals " << endl << "whose abscissas are:" << endl << endl;
 
 	double delta;
@@ -20,13 +20,15 @@ int main() {
 	cout << "delta = " << delta << endl << endl;
 
 	double *X = new double[size + 1];
+	double *Y = new double[size + 1];
 
 	for (int i = 0; i <= size; i++) {
 		X[i] = delta*i;
-		cout << "X[" << i << "] = " << X[i] << endl;
+		Y[i] = X[i] * exp(X[i]);
+		cout << "X[" << i << "] = " << X[i] << "  Y[" << i << "] = " << Y[i] << endl << endl;
 	}
 
-	delete[] X;
+	delete[] X,Y;
 
 	return 0;
 }
