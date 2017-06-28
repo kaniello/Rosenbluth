@@ -2,6 +2,7 @@
 //
 
 #include "stdafx.h"
+#include <fftw3.h>
 
 
 
@@ -12,7 +13,7 @@ int main() {
 
 	std::cout << "enter N of points "; std::cin >> size;
 	std::cout << "enter sup "; std::cin >> sup;
-	std::cout << "Interval runs from 0 to " << sup << " and will be divided in " << size
+	std::cout << "Interval runs from 0 to " << sup << " and will be divided into " << size
 		<< " intervals " << endl << "whose abscissas are:" << endl << endl;
 
 	double delta;
@@ -29,6 +30,20 @@ int main() {
 	}
 
 	delete[] X,Y;
+
+	fftw_complex *in, *out;
+	fftw_plan p;
+
+	int N = 32;
+
+	in = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * N);
+	out = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * N);
+	p = fftw_plan_dft_1d(N, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+
+	fftw_execute(p); /* repeat as needed */
+
+	fftw_destroy_plan(p);
+	fftw_free(in); fftw_free(out);
 
 	return 0;
 }
