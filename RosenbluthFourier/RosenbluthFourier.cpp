@@ -8,43 +8,57 @@
 
 int main() {
 
-	int size;
+	int const Pi = 3.14159265359;
+	int N;
 	double sup;
 
-	std::cout << "enter N of points "; std::cin >> size;
+	std::cout << "enter N of points "; std::cin >> N;
 	std::cout << "enter sup "; std::cin >> sup;
-	std::cout << "Interval runs from 0 to " << sup << " and will be divided into " << size
-		<< " intervals " << endl << "whose abscissas are:" << endl << endl;
+	std::cout << "Interval runs from 0 to " << sup << " and will be divided into " << N
+		<< " intervals." << endl;
+	
+	double T, Df;
+	T = sup / (N-1);
+	Df = 1 / sup;
+	cout << "Sampling interval T = " << T << endl;
+	cout << "Frequency spacing df = " << Df << endl << endl; 
 
-	double delta;
-	delta = sup / size;
-	cout << "delta = " << delta << endl << endl;
 
-	double *X = new double[size + 1];
-	double *Y = new double[size + 1];
 
-	for (int i = 0; i <= size; i++) {
-		X[i] = delta*i;
+
+	double *X = new double[N];
+	double *Y = new double[N];
+
+	for (int i = 0; i <= N; i++) {
+		X[i] = T*i;
 		Y[i] = X[i] * exp(-pow(X[i],2));
-		cout << "X[" << i << "] = " << X[i] << "  Y[" << i << "] = " << Y[i] << endl << endl;
+		cout << "X[" << i << "] = " << X[i] << "  Y[" << i << "] = " << Y[i] << endl;
 	}
 
-	delete[] X,Y;
+	cout << endl << "Analitically tranformed function" << endl << endl ;
 
-	fftw_complex *in, *out;
+	double *f = new double[N + 1];
+	double *Yt = new double[N + 1];
+
+	for (int k = 0; k <= N; k++) {
+		// calc w
+		f[k] = Pi*k*Df;
+		Yt[k] = f[k] * exp(-pow(f[k]/2., 2));
+		cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k] << endl;
+	}
+
+	cout << endl << "FFTW-tranformed function" << endl << endl;
+	
 	fftw_plan p;
+	p = fftw_plan_r2r_1d(N, Y, Yt, FFTW_RODFT00, FFTW_ESTIMATE);
+	fftw_execute(p);
 
-	int N = 32;
-
-	in = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * N);
-	out = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * N);
-	p = fftw_plan_dft_1d(N, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
-
-	fftw_execute(p); /* repeat as needed */
+	for (int k = 0; k <= N; k++) {
+		cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k]*T << endl;
+	}
+	
 
 	fftw_destroy_plan(p);
-	fftw_free(in); fftw_free(out);
-
 	return 0;
 }
 
