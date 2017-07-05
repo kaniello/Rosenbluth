@@ -12,19 +12,16 @@ int main() {
 	int N;
 	double sup;
 
-	std::cout << "enter N of points "; std::cin >> N;
-	std::cout << "enter sup "; std::cin >> sup;
-	std::cout << "Interval runs from 0 to " << sup << " and will be divided into " << N
-		<< " intervals." << endl;
+	cout << "enter N of points "; std::cin >> N;
+	cout << "enter sup "; std::cin >> sup;
+	cout << "Interval runs from 0 to " << sup << " and will be divided into " << N
+	   	<< " intervals." << endl;
 	
 	double T, Df;
 	T = sup / (N-1);
 	Df = 1 / sup;
 	cout << "Sampling interval T = " << T << endl;
 	cout << "Frequency spacing df = " << Df << endl << endl; 
-
-
-
 
 	double *X = new double[N];
 	double *Y = new double[N];
@@ -52,12 +49,12 @@ int main() {
 	fftw_plan p;
 	p = fftw_plan_r2r_1d(N, Y, Yt, FFTW_RODFT00, FFTW_ESTIMATE);
 	fftw_execute(p);
-
+	
 	for (int k = 0; k <= N; k++) {
-		cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k]*T << endl;
+		Yt[k] = Yt[k] * T;
+		cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k] << endl;
 	}
 	
-
 	fftw_destroy_plan(p);
 	return 0;
 }
