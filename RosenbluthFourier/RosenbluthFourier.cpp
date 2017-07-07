@@ -34,28 +34,30 @@ int main() {
 
 	cout << endl << "Analitically tranformed function" << endl << endl ;
 
-	double *f = new double[N + 1];
-	double *Yt = new double[N + 1];
+	double *f = new double[N];
+	double *Yt = new double[N];
 
 	for (int k = 0; k <= N; k++) {
-		// calc w
+		// calc pi*w
 		f[k] = Pi*k*Df;
-		Yt[k] = f[k] * exp(-pow(f[k]/2., 2));
+		Yt[k] = (1./2.)*Pi*f[k] * exp(-pow(f[k]/2., 2));
 		cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k] << endl;
 	}
 
 	cout << endl << "FFTW-tranformed function" << endl << endl;
-	
+
 	fftw_plan p;
 	p = fftw_plan_r2r_1d(N, Y, Yt, FFTW_RODFT00, FFTW_ESTIMATE);
 	fftw_execute(p);
-	
+
 	for (int k = 0; k <= N; k++) {
-		Yt[k] = Yt[k] * T;
+		Yt[k] = Yt[k] * T * double(sqrt(Pi)) ;
 		cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k] << endl;
 	}
 	
 	fftw_destroy_plan(p);
+	//fftw_free(Y);
+	//fftw_free(Yt);
 	return 0;
 }
 
