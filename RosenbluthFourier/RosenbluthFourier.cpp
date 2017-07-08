@@ -8,7 +8,7 @@
 
 int main() {
 
-	int const Pi = 3.14159265359;
+	double const Pi = 3.14159265359;
 	int N;
 	double sup;
 
