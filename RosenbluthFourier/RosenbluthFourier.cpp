@@ -62,7 +62,7 @@ int main() {
 
 	//cout << "f[0] = 0  Yt[0] = " << Yt[N] * T * double(sqrt(Pi)) << endl;
 	for (int k = 1; k < N; k++) {
-		Yt[k-1] = Yt[k-1]* T ;
+		Yt[k-1] = Yt[k-1]* T * double(sqrt(Pi));
 		//cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k-1] << endl;
 		results << f[k] << " " << Yt[k-1] << endl;
 	}
