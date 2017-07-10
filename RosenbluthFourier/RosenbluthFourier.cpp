@@ -47,7 +47,7 @@ int main() {
 	for (int k = 1; k < N; k++) {
 		// calc pi*w
 		f[k] = Pi*k*Df;
-		Yt[k] = 2.*f[k] / (pow(f[k],2)+4.);
+		Yt[k] = 2.*f[k] * double(sqrt(Pi)) / (pow(f[k],2)+4.);
 		//Yt[k] = (1. / 2.)*Pi*f[k] * exp(-pow(f[k] / 2., 2));
 		//cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k] << endl;
 		theory << f[k] << " " << Yt[k] << endl;
