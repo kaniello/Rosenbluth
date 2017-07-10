@@ -26,7 +26,7 @@ int main() {
 	double *X = new double[N];
 	double *Y = new double[N];
 
-	for (int i = 0; i <= N; i++) {
+	for (int i = 0; i < N; i++) {
 		X[i] = T*i;
 		Y[i] = X[i] * exp(-pow(X[i],2));
 		cout << "X[" << i << "] = " << X[i] << "  Y[" << i << "] = " << Y[i] << endl;
@@ -37,7 +37,7 @@ int main() {
 	double *f = new double[N];
 	double *Yt = new double[N];
 
-	for (int k = 0; k <= N; k++) {
+	for (int k = 0; k < N; k++) {
 		// calc pi*w
 		f[k] = Pi*k*Df;
 		Yt[k] = (1./2.)*Pi*f[k] * exp(-pow(f[k]/2., 2));
@@ -50,9 +50,9 @@ int main() {
 	p = fftw_plan_r2r_1d(N, Y, Yt, FFTW_RODFT00, FFTW_ESTIMATE);
 	fftw_execute(p);
 
-	for (int k = 0; k <= N; k++) {
-		Yt[k] = Yt[k] * T * double(sqrt(Pi)) ;
-		cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k] << endl;
+	for (int k = 1; k < N; k++) {
+		Yt[k-1] = Yt[k-1] * T * double(sqrt(Pi)) ;
+		cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k-1] << endl;
 	}
 	
 	fftw_destroy_plan(p);
