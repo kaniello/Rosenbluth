@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include <fftw3.h>
+#include <fstream>
 
 
 
@@ -10,11 +11,11 @@ int main() {
 
 	double const Pi = 3.14159265359;
 	int N;
-	double sup;
+	double sup =5;
 
-	cout << "enter N of points "; std::cin >> N;
-	cout << "enter sup "; std::cin >> sup;
-	cout << "Interval runs from 0 to " << sup << " and will be divided into " << N
+	cout << "enter N of points "; cin >> N;
+	//cout << "enter sup "; cin >> sup;
+	cout << "Interval runs from 0 to " << sup << " and will be divided into " << N-1
 	   	<< " intervals." << endl;
 	
 	double T, Df;
@@ -26,22 +27,30 @@ int main() {
 	double *X = new double[N];
 	double *Y = new double[N];
 
-	for (int i = 0; i <= N; i++) {
+	for (int i = 0; i < N; i++) {
 		X[i] = T*i;
-		Y[i] = X[i] * exp(-pow(X[i],2));
-		cout << "X[" << i << "] = " << X[i] << "  Y[" << i << "] = " << Y[i] << endl;
+		//Y[i] = X[i] * exp(-pow(X[i],2));
+		Y[i] = exp(-2*X[i]);
+		//cout << "X[" << i << "] = " << X[i] << "  Y[" << i << "] = " << Y[i] << endl;
 	}
 
+	ofstream results("FFTW.dat");
+	ofstream theory("Analytical.dat");
+
+	if (theory.is_open())
+	{
 	cout << endl << "Analitically tranformed function" << endl << endl ;
 
 	double *f = new double[N];
 	double *Yt = new double[N];
 
-	for (int k = 0; k <= N; k++) {
+	for (int k = 0; k < N; k++) {
 		// calc pi*w
 		f[k] = Pi*k*Df;
 		Yt[k] = (1./2.)*Pi*f[k] * exp(-pow(f[k]/2., 2));
-		cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k] << endl;
+		//Yt[k] = (1. / 2.)*Pi*f[k] * exp(-pow(f[k] / 2., 2));
+		//cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k] << endl;
+		theory << f[k] << " " << Yt[k] << endl;
 	}
 
 	cout << endl << "FFTW-tranformed function" << endl << endl;
@@ -50,14 +59,24 @@ int main() {
 	p = fftw_plan_r2r_1d(N, Y, Yt, FFTW_RODFT00, FFTW_ESTIMATE);
 	fftw_execute(p);
 
-	for (int k = 0; k <= N; k++) {
-		Yt[k] = Yt[k] * T * double(sqrt(Pi)) ;
-		cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k] << endl;
+
+	//cout << "f[0] = 0  Yt[0] = " << Yt[N] * T * double(sqrt(Pi)) << endl;
+	for (int k = 1; k <= N; k++) {
+		Yt[k] = Yt[k]* T * double(sqrt(Pi)) ;
+		//cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k-1] << endl;
+		results << f[k] << " " << Yt[k] << endl;
 	}
-	
+
 	fftw_destroy_plan(p);
 	//fftw_free(Y);
 	//fftw_free(Yt);
+
+
+	}
+	else cout << "Unable to open file";
+	results.close();
+	theory.close();
+
 	return 0;
 }
 
