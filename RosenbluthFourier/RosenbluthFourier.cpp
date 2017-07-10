@@ -37,7 +37,7 @@ int main() {
 	double *f = new double[N];
 	double *Yt = new double[N];
 
-	for (int k = 0; k < N; k++) {
+	for (int k = 1; k < N; k++) {
 		// calc pi*w
 		f[k] = Pi*k*Df;
 		Yt[k] = (1./2.)*Pi*f[k] * exp(-pow(f[k]/2., 2));
