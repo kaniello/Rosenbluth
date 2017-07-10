@@ -29,8 +29,8 @@ int main() {
 
 	for (int i = 0; i < N; i++) {
 		X[i] = T*i;
-		//Y[i] = X[i] * exp(-pow(X[i],2));
-		Y[i] = exp(-2*X[i]);
+		Y[i] = X[i] * exp(-pow(X[i],2));
+		//Y[i] = exp(-2*X[i]);
 		//cout << "X[" << i << "] = " << X[i] << "  Y[" << i << "] = " << Y[i] << endl;
 	}
 
@@ -44,7 +44,7 @@ int main() {
 	double *f = new double[N];
 	double *Yt = new double[N];
 
-	for (int k = 0; k < N; k++) {
+	for (int k = 1; k < N; k++) {
 		// calc pi*w
 		f[k] = Pi*k*Df;
 		Yt[k] = (1./2.)*Pi*f[k] * exp(-pow(f[k]/2., 2));
@@ -61,10 +61,10 @@ int main() {
 
 
 	//cout << "f[0] = 0  Yt[0] = " << Yt[N] * T * double(sqrt(Pi)) << endl;
-	for (int k = 1; k <= N; k++) {
-		Yt[k] = Yt[k]* T * double(sqrt(Pi)) ;
+	for (int k = 1; k < N; k++) {
+		Yt[k-1] = Yt[k-1]* T * double(sqrt(Pi)) ;
 		//cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k-1] << endl;
-		results << f[k] << " " << Yt[k] << endl;
+		results << f[k] << " " << Yt[k-1] << endl;
 	}
 
 	fftw_destroy_plan(p);
