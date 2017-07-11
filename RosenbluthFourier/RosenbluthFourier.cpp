@@ -45,7 +45,7 @@ int main() {
 	double *f = new double[N];
 	double *Yt = new double[N];
 
-	for (int k = 1; k < N; k++) {
+	for (int k = 0; k < N; k++) {
 		// calc pi*w
 		f[k] = Pi*k*Df;
 		//Yt[k] = 2.*f[k] * double(sqrt(Pi)) / (pow(f[k],2)+pow(a,2));
@@ -60,13 +60,20 @@ int main() {
 	p = fftw_plan_r2r_1d(N, Y, Yt, FFTW_RODFT00, FFTW_ESTIMATE);
 	fftw_execute(p);
 
-
+	results << f[0] << " " << 0 << endl;
 	//cout << "f[0] = 0  Yt[0] = " << Yt[N] * T * double(sqrt(Pi)) << endl;
-	for (int k = 1; k < N; k++) {
-		Yt[k-1] = Yt[k-1]* T * double(sqrt(Pi));
-		//cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k-1] << endl;
-		results << f[k] << " " << Yt[k-1] << endl;
-		Yt[k-1] = Yt[k-1] / pow(f[k],2);
+	{
+		double swap;
+
+		for (int k = N-1; k <= 0; k--) {
+			swap = Yt[k+1];
+			Yt[k+1] = Yt[k-1];
+
+			Yt[k] = Yt[k] * T * double(sqrt(Pi));
+			//cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k-1] << endl;
+			results << f[k] << " " << Yt[k - 1] << endl;
+			
+		}
 	}
 
 
