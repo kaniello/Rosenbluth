@@ -10,6 +10,7 @@
 int main() {
 
 	double const Pi = 3.14159265359;
+	double const a = 2;
 	int N;
 	double sup =5;
 
@@ -29,8 +30,8 @@ int main() {
 
 	for (int i = 0; i < N; i++) {
 		X[i] = T*i;
-		//Y[i] = X[i] * exp(-pow(X[i],2));
-		Y[i] = exp(-2*X[i]);
+		Y[i] = X[i] * exp(-pow(X[i],2));
+		//Y[i] = exp(-a*X[i]);
 		//cout << "X[" << i << "] = " << X[i] << "  Y[" << i << "] = " << Y[i] << endl;
 	}
 
@@ -47,8 +48,8 @@ int main() {
 	for (int k = 1; k < N; k++) {
 		// calc pi*w
 		f[k] = Pi*k*Df;
-		Yt[k] = 2.*f[k] * double(sqrt(Pi)) / (pow(f[k],2)+4.);
-		//Yt[k] = (1. / 2.)*Pi*f[k] * exp(-pow(f[k] / 2., 2));
+		//Yt[k] = 2.*f[k] * double(sqrt(Pi)) / (pow(f[k],2)+pow(a,2));
+		Yt[k] = (1. / 2.)*Pi*f[k] * exp(-pow(f[k] / 2., 2));
 		//cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k] << endl;
 		theory << f[k] << " " << Yt[k] << endl;
 	}
@@ -65,7 +66,9 @@ int main() {
 		Yt[k-1] = Yt[k-1]* T * double(sqrt(Pi));
 		//cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k-1] << endl;
 		results << f[k] << " " << Yt[k-1] << endl;
+		Yt[k-1] = Yt[k-1] / pow(f[k],2);
 	}
+
 
 	fftw_destroy_plan(p);
 	//fftw_free(Y);
