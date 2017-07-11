@@ -62,19 +62,12 @@ int main() {
 
 	results << f[0] << " " << 0 << endl;
 	//cout << "f[0] = 0  Yt[0] = " << Yt[N] * T * double(sqrt(Pi)) << endl;
-	{
-		double swap;
 
-		for (int k = N-1; k <= 0; k--) {
-			swap = Yt[k+1];
-			Yt[k+1] = Yt[k-1];
-
-			Yt[k] = Yt[k] * T * double(sqrt(Pi));
+		for (int k = N-1; k < 0; k--) {
+			Yt[k] = Yt[k-1] * T * double(sqrt(Pi));
 			//cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k-1] << endl;
-			results << f[k] << " " << Yt[k - 1] << endl;
-			
+			results << f[k] << " " << Yt[k - 1] << endl;			
 		}
-	}
 
 
 	fftw_destroy_plan(p);
