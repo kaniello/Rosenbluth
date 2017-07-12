@@ -60,16 +60,20 @@ int main() {
 	p = fftw_plan_r2r_1d(N, Y, Yt, FFTW_RODFT00, FFTW_ESTIMATE);
 	fftw_execute(p);
 
-	results << f[0] << " " << 0 << endl;
 	//cout << "f[0] = 0  Yt[0] = " << Yt[N] * T * double(sqrt(Pi)) << endl;
-
-		for (int k = N-1; k < 0; k--) {
-			Yt[k] = Yt[k-1] * T * double(sqrt(Pi));
-			//cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k-1] << endl;
-			results << f[k] << " " << Yt[k - 1] << endl;			
+	{int k;
+		for (k = N; k > 1; k--) {
+		Yt[k - 1] = Yt[k - 2] * T * double(sqrt(Pi));
+		//cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k-1] << endl;
 		}
 
+		results << 0 << " " << 0 << endl;
+		for (k = 1; k < N - 1; k++) {
+		results << f[k - 1] << " " << Yt[k - 1] << endl;
+		}
+	}
 
+		
 	fftw_destroy_plan(p);
 	//fftw_free(Y);
 	//fftw_free(Yt);
