@@ -11,7 +11,7 @@ int main() {
 
 	double const Pi = 3.14159265359;
 	double const a = 2;
-	int N;
+	int N,k;
 	double sup =5;
 
 	cout << "enter N of points "; cin >> N;
@@ -28,14 +28,15 @@ int main() {
 	double *X = new double[N];
 	double *Y = new double[N];
 
-	for (int i = 0; i < N; i++) {
-		X[i] = T*i;
-		Y[i] = X[i] * exp(-pow(X[i],2));
+	for (k = 0; k < N; k++) {
+		X[k] = T*k;
+		Y[k] = X[k] * exp(-pow(X[k],2));
 		//Y[i] = exp(-a*X[i]);
 		//cout << "X[" << i << "] = " << X[i] << "  Y[" << i << "] = " << Y[i] << endl;
 	}
 
 	ofstream results("FFTW.dat");
+	ofstream Test("SuperTest.dat");
 	ofstream theory("Analytical.dat");
 
 	if (theory.is_open())
@@ -45,7 +46,7 @@ int main() {
 	double *f = new double[N];
 	double *Yt = new double[N];
 
-	for (int k = 0; k < N; k++) {
+	for (k = 0; k < N; k++) {
 		// calc pi*w
 		f[k] = Pi*k*Df;
 		//Yt[k] = 2.*f[k] * double(sqrt(Pi)) / (pow(f[k],2)+pow(a,2));
@@ -61,18 +62,30 @@ int main() {
 	fftw_execute(p);
 
 	//cout << "f[0] = 0  Yt[0] = " << Yt[N] * T * double(sqrt(Pi)) << endl;
-	{int k;
-		for (k = N; k > 1; k--) {
+
+	for (k = N; k > 1; k--) {
 		Yt[k - 1] = Yt[k - 2] * T * double(sqrt(Pi));
 		//cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k-1] << endl;
-		}
-
-		results << 0 << " " << 0 << endl;
-		for (k = 1; k < N - 1; k++) {
-		results << f[k - 1] << " " << Yt[k - 1] << endl;
-		}
 	}
 
+	results << 0 << " " << 0 << endl;
+	for (k = 1; k < N - 1; k++) {
+		results << f[k - 1] << " " << Yt[k - 1] << endl;
+	}
+
+	*Yt = *Yt / pow(*f,2);
+	Yt[0] =  Yt[2] + (f[0] - f[2])*(Yt[1] - Yt[2]) / (f[1] - f[2]);
+	for (k = 1; k < N - 1; k++) {
+		Test << k*T << " " << Yt[k - 1] << endl;
+		//cout << "f[" << k << "] = " << f[k] << "  Yt[" << k << "] = " << Yt[k - 1] << endl;
+	}
+	
+	p = fftw_plan_r2r_1d(N, Yt, Y, FFTW_RODFT00, FFTW_ESTIMATE);
+	fftw_execute(p);
+
+	for (k = 1; k < N - 1; k++) {
+		//Test << k*T << " " << Y[k - 1] << endl;
+	}
 		
 	fftw_destroy_plan(p);
 	//fftw_free(Y);
