@@ -4,9 +4,6 @@
 #include "stdafx.h"
 #include <fftw3.h>
 #include <fstream>
-#include <limits>
-#include "Spline.h"
-#include "DE.h"
 
 
 tk::spline s;
@@ -84,93 +81,4 @@ int main() {
 			
 	fftw_destroy_plan(p);
 
-/* -------------------         END OF FOURIER TRANSFORM     --------------------                 */
-		
-
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-                                 /+inf
-                                |
--------     CALCULATE     (1/r)*| (1/w^2)*Yt*sin(w*r) dw   by means of DoubleExponential technique  -------
-	                            |
-                                /0                                                                        */	
-
-
-	// Fill two vectors with the frequencies and the Yt respectively, for the Spline interpolation 
-	std::vector<double> v1(f, f + N);
-	std::vector<double> v2(Yt, Yt + N);
-	s.set_points(v1, v2); 
-
-	
-	// DoubleExponential integration: Variable declaration and initialization (intdeiini)
-	double intf(double); 
-
-	int lenaw;
-	
-	double tiny, aw[8000], i, err;
-
-	lenaw = 8000;
-	tiny = 1.0e-307;
-	
-	intdeiini(lenaw, tiny, 1.0e-10, aw);
-
-	//Perform the DE-integration for all the r_k values
-	for (k = 0; k < N; k++) {
-		nfunc = 0;
-		intdei(intf, 0.0, aw, &i, &err);
-		printf("I_3=int_0^infty Yt dx\n");
-		printf(" I_3= %lg\t, err= %lg\t, N= %d\n", i, err, nfunc);
-	}
-	
-	/*   nfunc = 0;
-	intdei(f4, 0.0, aw, &i, &err);
-	printf("I_4=int_0^infty exp(-x)/sqrt(x) dx\n");
-	printf(" I_4= %lg\t, err= %lg\t, N= %d\n", i, err, nfunc);*/
-
-	/*intdeoini(lenaw, tiny, 1.0e-10, aw);
-	nfunc = 0;
-	intdeo(f5, 0.0, 1.0, aw, &i, &err);
-	printf("i_5=int_0^infty sin(x)/x dx\n");
-	printf(" i_5= %lg\t, err= %lg\t, n= %d\n", i, err, nfunc);
-	nfunc = 0;
-	intdeo(f6, 0.0, 1.0, aw, &i, &err);
-	printf("I_6=int_0^infty cos(x)/sqrt(x) dx\n");
-	printf(" I_6= %lg\t, err= %lg\t, N= %d\n", i, err, nfunc);*/
-
-	}
-
-	else cout << "Unable to open file";
-	results.close();
-	theory.close();
-
-
-	return 0;
 }
-
-
-double intf(double x)
-{
-	extern int nfunc;
-
-	nfunc++;
-
-	/*if (x >= f[N - 1]) {
-		return 0.0;
-	}
-	else
-	{*/
-		//cout << x << "  " << s(x) << "  " << (1. / 2.)*Pi*x*exp(-pow(x / 2., 2)) << endl;
-		//cin.get();
-	//cout << k << endl;
-		return  (1./(pow(x,2.)))*s(x)*sin(X[k]*x);
-		//return (1. / 2.)*Pi*x*exp(-pow(x / 2., 2));
-	}
-
-
-
-	//x = x * 1;
-
-	//return 1 / (1 + x * x);
-	//return x*exp(-pow(x, 2));// *sin(1.*x) / (pow(x, 1));
-	//return (1. / 2.)*Pi*x*exp(-pow(x/2., 2));
-//}

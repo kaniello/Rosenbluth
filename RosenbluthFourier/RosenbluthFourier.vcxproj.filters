@@ -24,9 +24,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="DE.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="Spline.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
