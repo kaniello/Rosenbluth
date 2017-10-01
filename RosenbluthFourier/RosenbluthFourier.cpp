@@ -13,7 +13,6 @@ double *X;
 int main() {
 
 	double const Pi = acos(-1);
-	double inf = numeric_limits<double>::infinity();
 	double sup = 10.;
 
 	cout << "enter N of points "; cin >> N;
